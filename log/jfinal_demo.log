@@ -1,0 +1,8 @@
+2019-05-31 11:00:48 INFO  ComsumerApp:15 - 结果是：100100
+2019-05-31 11:00:48 INFO  ComsumerApp:17 - 结果是：-99900
+2019-05-31 19:33:46 INFO  ComsumerApp:15 - 结果是：100100
+2019-05-31 19:33:46 INFO  ComsumerApp:17 - 结果是：-99900
+2019-05-31 19:40:37 INFO  ComsumerApp:15 - 结果是：100100
+2019-05-31 19:40:37 INFO  ComsumerApp:17 - 结果是：-99900
+2019-05-31 19:42:01 INFO  ComsumerApp:15 - 结果是：70
+2019-05-31 19:42:01 INFO  ComsumerApp:17 - 结果是：99
