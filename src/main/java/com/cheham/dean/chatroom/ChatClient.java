@@ -8,11 +8,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class ChatClient {
 
-    private static final String HOST = "127.0.0.1";
+    private static final String HOST = "10.10.2.56";
 
     private static final int PORT = 12306;
 
@@ -20,6 +22,16 @@ public class ChatClient {
 
     public static void main(String[] args) {
         new ChatClient().run();
+    }
+
+    public String getLocalhost() {
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            return address.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void run() {
@@ -33,13 +45,13 @@ public class ChatClient {
             receiver = new BufferedReader(new InputStreamReader(socket.getInputStream())); //接受者
             String msg = null;
             do {
-                System.out.print("客户端说：");
+                System.out.print(getLocalhost()+"说：");
                 input = new BufferedReader(new InputStreamReader(System.in));
                 msg = input.readLine();
                 if (msg.equalsIgnoreCase("bye")) break;
                 sender.println(msg); //发送消息
                 sender.flush();
-                log.info(String.format("服务器说：%s", receiver.readLine())); //接受回复
+                log.info(String.format(HOST+"说：%s", receiver.readLine())); //接受回复
             } while (StringUtils.isNotEmpty(msg));
             receiver.close();
             input.close();
