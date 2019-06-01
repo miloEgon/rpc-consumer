@@ -11,7 +11,7 @@ public class ComsumerApp {
 
     public static void main(String[] args) {
         Calculater calculater = new CalculatorRemoteImpl();
-        int result1 = calculater.add(25, 45);
+        int result1 = calculater.add(25, 487);
         logger.info("结果是："+result1);
         int result2 = calculater.subtract(100, 1);
         logger.info("结果是："+result2);
