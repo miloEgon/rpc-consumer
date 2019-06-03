@@ -14,24 +14,37 @@ import java.net.UnknownHostException;
 
 public class ChatClient {
 
-    private static final String HOST = "10.10.2.56";
+//    private static final String HOST = "10.10.2.56";
+    private static final String HOST = "127.0.0.1";
 
     private static final int PORT = 12306;
 
     private static final Logger log = LoggerFactory.getLogger(ChatClient.class);
 
+    private InetAddress localAddr = null;
+
+    private String localHost = null;
+
     public static void main(String[] args) {
         new ChatClient().run();
     }
 
-    public String getLocalhost() {
+    public String getLocalHost() {
         try {
-            InetAddress address = InetAddress.getLocalHost();
-            return address.getHostAddress();
+            localAddr = InetAddress.getLocalHost();
+            localHost = localAddr.getHostAddress();
+            if (localHost.equals(HOST)) return "客户端";
+            else return localHost;
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String getServerHost() {
+        if (HOST.equals("127.0.0.1"))
+            return "服务端";
+        return HOST;
     }
 
     public void run() {
@@ -43,16 +56,22 @@ public class ChatClient {
             socket = new Socket(HOST, PORT); //创建套接字
             sender = new PrintWriter(socket.getOutputStream()); //发送者
             receiver = new BufferedReader(new InputStreamReader(socket.getInputStream())); //接受者
-            String msg = null;
+            String send_msg = null;
+            String receive_msg = null;
             do {
-                System.out.print(getLocalhost()+"说：");
+                System.out.print(getLocalHost()+"说：");
                 input = new BufferedReader(new InputStreamReader(System.in));
-                msg = input.readLine();
-                if (msg.equalsIgnoreCase("bye")) break;
-                sender.println(msg); //发送消息
+                send_msg = input.readLine();
+                sender.println(send_msg); //发送消息
                 sender.flush();
-                log.info(String.format(HOST+"说：%s", receiver.readLine())); //接受回复
-            } while (StringUtils.isNotEmpty(msg));
+
+                if (send_msg.equalsIgnoreCase("bye")) break;
+
+                receive_msg = receiver.readLine();
+                log.info(String.format(getServerHost()+"说：%s", receive_msg)); //接受回复
+
+                if (receive_msg.equalsIgnoreCase("bye")) break;
+            } while (StringUtils.isNotEmpty(send_msg));
             receiver.close();
             input.close();
             sender.close();
